@@ -164,15 +164,13 @@ static  long edebug_cputime_usec()
 
 
 typedef struct {
-    uint8_t type[256];               /* frame type, entry or exit */
-    uint8_t functype[256];           /* function flags of PT_FUNC_xxx */
+    uint8_t functype[256];
     uint8_t p;
 
     uint32_t lineno[256];            /* entry lineno */
     char *filename[256];               /* entry filename */
     char *class[256];                  /* class name */
     char *function[256];               /* function name */
-    uint32_t level[256];             /* nesting level */
 
     uint32_t arg_count[256];         /* arguments number */
     char *args[256][256];                  /* arguments represent string */
