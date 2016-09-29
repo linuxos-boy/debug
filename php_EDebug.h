@@ -49,6 +49,8 @@ PHP_RINIT_FUNCTION(EDebug);
 PHP_RSHUTDOWN_FUNCTION(EDebug);
 PHP_MINFO_FUNCTION(EDebug);
 
+PHP_FUNCTION(confirm_EDebug_compiled);	/* For testing, remove later. */
+
 
 static  long edebug_time_sec()
 {

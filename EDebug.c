@@ -37,6 +37,10 @@ static void re_struct_display(edebug_return_struct *re_struct);
 static char *edebug_display_zval(zval *value);
 ZEND_API void edebug_execute(zend_op_array *op_array TSRMLS_DC);
 ZEND_API void edebug_execute_main(edebug_return_struct *re_struct,zend_execute_data *execute_data, zend_op_array *op_array TSRMLS_DC);
+const zend_function_entry EDebug_functions[] = {
+	PHP_FE(confirm_EDebug_compiled,	NULL)		/* For testing, remove later. */
+	PHP_FE_END	/* Must be the last line in EDebug_functions[] */
+};
 
 zend_module_entry EDebug_module_entry = {
 #if ZEND_MODULE_API_NO >= 20010901
@@ -90,6 +94,10 @@ PHP_MINFO_FUNCTION(EDebug)
 	php_info_print_table_header(2, "EDebug support", "enabled");
 	php_info_print_table_end();
 
+}
+
+PHP_FUNCTION(confirm_EDebug_compiled)
+{
 }
 
 ZEND_API void edebug_execute(zend_op_array *op_array TSRMLS_DC)
