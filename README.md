@@ -13,5 +13,8 @@ edebug 可以跟踪PHP在运行时的函数调用、请求信息、执行流程
     ```
     extension=EDebug.so
     ```
+#展示
 
+![image](https://raw.githubusercontent.com/linuxos-boy/debug/master/code.png)
+![image](https://raw.githubusercontent.com/linuxos-boy/debug/master/code2.png)
 
