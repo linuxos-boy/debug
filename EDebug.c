@@ -38,15 +38,6 @@ static char *edebug_display_zval(zval *value);
 ZEND_API void edebug_execute(zend_op_array *op_array TSRMLS_DC);
 ZEND_API void edebug_execute_main(edebug_return_struct *re_struct,zend_execute_data *execute_data, zend_op_array *op_array TSRMLS_DC);
 
-ZEND_DECLARE_MODULE_GLOBALS(EDebug)
-const zend_function_entry EDebug_functions[] = {
-	PHP_FE(confirm_EDebug_compiled,	NULL)		/* For testing, remove later. */
-	PHP_FE_END	/* Must be the last line in EDebug_functions[] */
-};
-/* }}} */
-
-/* {{{ EDebug_module_entry
- */
 zend_module_entry EDebug_module_entry = {
 #if ZEND_MODULE_API_NO >= 20010901
 	STANDARD_MODULE_HEADER,
@@ -63,101 +54,43 @@ zend_module_entry EDebug_module_entry = {
 #endif
 	STANDARD_MODULE_PROPERTIES
 };
-/* }}} */
 
 #ifdef COMPILE_DL_EDEBUG
 ZEND_GET_MODULE(EDebug)
 #endif
 
-/* {{{ PHP_INI
- */
-PHP_INI_BEGIN()
-    STD_PHP_INI_ENTRY("EDebug.global_value",      "1", PHP_INI_ALL, OnUpdateLong, global_value, zend_EDebug_globals, EDebug_globals)
-    STD_PHP_INI_ENTRY("EDebug.global_string", "foobar", PHP_INI_ALL, OnUpdateString, global_string, zend_EDebug_globals, EDebug_globals)
-PHP_INI_END()
-
-/* {{{ php_EDebug_init_globals
- */
-static void php_EDebug_init_globals(zend_EDebug_globals *EDebug_globals)
-{
-	EDebug_globals->global_value = 1;
-	EDebug_globals->global_string = NULL;
-}
-
-/* {{{ PHP_MINIT_FUNCTION
- */
 PHP_MINIT_FUNCTION(EDebug)
 {
     edebug_copy_execute = zend_execute;
     zend_execute = edebug_execute; //zend_execute  自动执行的
 	return SUCCESS;
 }
-/* }}} */
-
-/* {{{ PHP_MSHUTDOWN_FUNCTION
- */
 PHP_MSHUTDOWN_FUNCTION(EDebug)
 {
     zend_execute = edebug_copy_execute;
 	return SUCCESS;
 }
-/* }}} */
 
-/* Remove if there's nothing to do at request start */
-/* {{{ PHP_RINIT_FUNCTION
- */
 PHP_RINIT_FUNCTION(EDebug)
 {
 	return SUCCESS;
 }
-/* }}} */
 
-/* Remove if there's nothing to do at request end */
-/* {{{ PHP_RSHUTDOWN_FUNCTION
- */
 PHP_RSHUTDOWN_FUNCTION(EDebug)
 {
     /* php_printf("%d",sizeof(re_struct)); */
     edebug_return_struct *rs = &re_struct;
     re_struct_display(rs);
-
-    /* php_printf("%s",edebug_trace[0]); */
-	/* PHPWRITE("<html>\n <head>\n  <title>Access Denied</title>\n </head>\n <body>\n  <h1>403 - File ", sizeof("<html>\n <head>\n  <title>Access Denied</title>\n </head>\n <body>\n  <h1>403 - File ") - 1); */
 	return SUCCESS;
 }
-/* }}} */
 
-/* {{{ PHP_MINFO_FUNCTION
- */
 PHP_MINFO_FUNCTION(EDebug)
 {
 	php_info_print_table_start();
 	php_info_print_table_header(2, "EDebug support", "enabled");
 	php_info_print_table_end();
 
-	/* Remove comments if you have entries in php.ini
-	DISPLAY_INI_ENTRIES();
-	*/
 }
-/* }}} */
-
-
-/* Remove the following function when you have successfully modified config.m4
-   so that your module can be compiled into PHP, it exists only for testing
-   purposes. */
-
-/* Every user-visible function in PHP should document itself in the source */
-/* {{{ proto string confirm_EDebug_compiled(string arg)
-   Return a string to confirm that the module is compiled in */
-PHP_FUNCTION(confirm_EDebug_compiled)
-{
-}
-/* }}} */
-/* The previous line is meant for vim and emacs, so it can correctly fold and
-   unfold functions in source code. See the corresponding marks just before
-   function definition, where the functions purpose is also documented. Please
-   follow this convention for the convenience of others editing your code.
-*/
 
 ZEND_API void edebug_execute(zend_op_array *op_array TSRMLS_DC)
 {
